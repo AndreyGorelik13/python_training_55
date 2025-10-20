@@ -58,6 +58,14 @@ class AddressHelper:
         wd.find_element(By.NAME, "submit").click()
         self.return_to_home_page()
 
+    def delete_first_address(self):
+        wd = self.app.wd
+        # select first address
+        wd.find_element(By.NAME, "selected[]").click()
+        # submit deletion
+        wd.find_element(By.NAME, "delete").click()
+        self.return_to_home_page()
+
     def open_address_page(self):
         wd = self.app.wd
         wd.find_element(By.LINK_TEXT, "add new").click()

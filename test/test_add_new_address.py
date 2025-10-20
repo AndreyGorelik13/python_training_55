@@ -1,12 +1,4 @@
-import pytest
-from fixture.application import Application
 from model.address import Address
-
-@pytest.fixture()
-def app(request):
-    fixture = Application()
-    request.addfinalizer(fixture.destroy)
-    return fixture
 
 def test_add_new_address(app):
     app.session.login("admin", "secret")
