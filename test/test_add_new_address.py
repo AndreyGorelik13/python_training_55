@@ -9,13 +9,13 @@ def app(request):
     return fixture
 
 def test_add_new_address(app):
-    app.login("admin", "secret")
-    app.create_address(Address("firstname", "middlename", "lastname", "nickname", "title", "company", "address",
+    app.session.login("admin", "secret")
+    app.address.create(Address("firstname", "middlename", "lastname", "nickname", "title", "company", "address",
                             "home", "mobile", "work", "fax", "email", "email2", "email3", "homepage"))
-    app.logout()
+    app.session.logout()
 
 def test_add_empty_address(app):
-    app.login("admin", "secret")
-    app.create_address(Address("", "", "", "", "", "", "",
+    app.session.login("admin", "secret")
+    app.address.create(Address("", "", "", "", "", "", "",
                             "", "", "", "", "", "", "", ""))
-    app.logout()
+    app.session.logout()
