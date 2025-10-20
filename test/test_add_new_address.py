@@ -1,6 +1,6 @@
 import pytest
-from application import Application
-from address import Address
+from fixture.application import Application
+from model.address import Address
 
 @pytest.fixture()
 def app(request):
