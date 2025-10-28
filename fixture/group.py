@@ -50,9 +50,10 @@ class GroupHelper:
 
     def filling_group_field_value(self, field_name, text):
         wd = self.app.wd
-        wd.find_element(By.NAME, field_name).click()
-        wd.find_element(By.NAME, field_name).clear()
-        wd.find_element(By.NAME, field_name).send_keys(text)
+        if text is not None:
+           wd.find_element(By.NAME, field_name).click()
+           wd.find_element(By.NAME, field_name).clear()
+           wd.find_element(By.NAME, field_name).send_keys(text)
 
     def open_groups_page(self):
         wd = self.app.wd

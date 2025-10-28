@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class AddressHelper:
 
     def __init__(self, app):
@@ -35,9 +36,10 @@ class AddressHelper:
 
     def filling_address_field_value(self, field_name, text):
         wd = self.app.wd
-        wd.find_element(By.NAME, field_name).click()
-        wd.find_element(By.NAME, field_name).clear()
-        wd.find_element(By.NAME, field_name).send_keys(text)
+        if text is not None:
+            wd.find_element(By.NAME, field_name).click()
+            wd.find_element(By.NAME, field_name).clear()
+            wd.find_element(By.NAME, field_name).send_keys(text)
 
     def delete_first_address(self):
         wd = self.app.wd
