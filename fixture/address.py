@@ -65,7 +65,8 @@ class AddressHelper:
 
     def open_address_page(self):
         wd = self.app.wd
-        wd.find_element(By.XPATH, "//a[normalize-space()='home']").click()
+        if not (wd.current_url.endswith("/index.php") and len(wd.find_elements(By.XPATH, "//input[@value='Send e-Mail']")) > 0):
+           wd.find_element(By.XPATH, "//a[normalize-space()='home']").click()
 
     def click_add_address_button(self):
         wd = self.app.wd
@@ -73,7 +74,8 @@ class AddressHelper:
 
     def return_to_home_page(self):
         wd = self.app.wd
-        wd.find_element(By.LINK_TEXT, "home page").click()
+        if not (wd.current_url.endswith("/index.php") and len(wd.find_elements(By.XPATH, "//input[@value='Send e-Mail']")) > 0):
+            wd.find_element(By.LINK_TEXT, "home page").click()
 
     def count(self):
         wd = self.app.wd
