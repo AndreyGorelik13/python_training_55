@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 
+from model.address import Address
+
 
 class AddressHelper:
 
@@ -81,3 +83,14 @@ class AddressHelper:
         wd = self.app.wd
         self.open_address_page()
         return len(wd.find_elements(By.NAME, "selected[]"))
+
+    def get_address_list(self):
+        wd = self.app.wd
+        self.open_address_page()
+        address_list = []
+        for element in (wd.find_elements(By.XPATH, "(//tr[@name='entry'])")):
+            id = element.find_element(By.NAME, "selected[]").get_attribute("value")
+            first_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
+            last_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
+            address_list.append(Address(id=id, firstname=first_name, lastname=last_name))
+        return address_list
