@@ -17,6 +17,7 @@ class AddressHelper:
         # submit address creation
         wd.find_element(By.NAME, "submit").click()
         self.return_to_home_page()
+        self.address_cache = None
 
     def fill_address_firm(self, address):
         wd = self.app.wd
@@ -51,6 +52,7 @@ class AddressHelper:
         # submit deletion
         wd.find_element(By.NAME, "delete").click()
         self.return_to_home_page()
+        self.address_cache = None
 
     def modify_first_address(self, address):
         wd = self.app.wd
@@ -64,6 +66,7 @@ class AddressHelper:
         # submit address edition
         wd.find_element(By.NAME, "update").click()
         self.return_to_home_page()
+        self.address_cache = None
 
     def open_address_page(self):
         wd = self.app.wd
@@ -84,13 +87,16 @@ class AddressHelper:
         self.open_address_page()
         return len(wd.find_elements(By.NAME, "selected[]"))
 
+    address_cache = None
+
     def get_address_list(self):
-        wd = self.app.wd
-        self.open_address_page()
-        address_list = []
-        for element in (wd.find_elements(By.XPATH, "(//tr[@name='entry'])")):
-            id = element.find_element(By.NAME, "selected[]").get_attribute("value")
-            first_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
-            last_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
-            address_list.append(Address(id=id, firstname=first_name, lastname=last_name))
-        return address_list
+        if self.address_cache is None:
+            wd = self.app.wd
+            self.open_address_page()
+            self.address_cache = []
+            for element in (wd.find_elements(By.XPATH, "(//tr[@name='entry'])")):
+                id = element.find_element(By.NAME, "selected[]").get_attribute("value")
+                first_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
+                last_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
+                self.address_cache.append(Address(id=id, firstname=first_name, lastname=last_name))
+        return list(self.address_cache)
