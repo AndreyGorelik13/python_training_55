@@ -45,20 +45,28 @@ class AddressHelper:
             wd.find_element(By.NAME, field_name).send_keys(text)
 
     def delete_first_address(self):
+        self.delete_address_by_index(0)
+
+    def delete_address_by_index(self, index):
         wd = self.app.wd
         self.open_address_page()
-        # select first address
-        wd.find_element(By.NAME, "selected[]").click()
+        self.select_address_by_index(index)
         # submit deletion
         wd.find_element(By.NAME, "delete").click()
         self.return_to_home_page()
         self.address_cache = None
 
+    def select_address_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements(By.NAME, "selected[]")[index].click()
+
     def modify_first_address(self, address):
+        self.modify_address_by_index(0, address)
+
+    def modify_address_by_index(self, index, address):
         wd = self.app.wd
         self.open_address_page()
-        # select first address
-        wd.find_element(By.NAME, "selected[]").click()
+        self.select_address_by_index(index)
         # init address edition
         wd.find_element(By.XPATH, "(//img[@title='Edit'])[1]").click()
         # fill address firm
