@@ -1,3 +1,5 @@
+from operator import index
+
 from selenium.webdriver.common.by import By
 
 from model.address import Address
@@ -66,15 +68,18 @@ class AddressHelper:
     def modify_address_by_index(self, index, address):
         wd = self.app.wd
         self.open_address_page()
-        self.select_address_by_index(index)
-        # init address edition
-        wd.find_element(By.XPATH, "(//img[@title='Edit'])[1]").click()
+        #self.select_address_by_index(index)
+        self.init_address_edition_by_index(index)
         # fill address firm
         self.fill_address_firm(address)
         # submit address edition
         wd.find_element(By.NAME, "update").click()
         self.return_to_home_page()
         self.address_cache = None
+
+    def init_address_edition_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements(By.XPATH, "(//img[@title='Edit'])")[index].click()
 
     def open_address_page(self):
         wd = self.app.wd
