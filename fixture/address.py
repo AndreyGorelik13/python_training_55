@@ -1,3 +1,4 @@
+import re
 from operator import index
 
 from selenium.webdriver.common.by import By
@@ -79,6 +80,7 @@ class AddressHelper:
 
     def init_address_edition_by_index(self, index):
         wd = self.app.wd
+        self.open_address_page()
         wd.find_elements(By.XPATH, "(//img[@title='Edit'])")[index].click()
 
     def open_address_page(self):
@@ -108,8 +110,39 @@ class AddressHelper:
             self.open_address_page()
             self.address_cache = []
             for element in (wd.find_elements(By.XPATH, "(//tr[@name='entry'])")):
+                cells = element.find_elements(By.TAG_NAME, "td")
                 id = element.find_element(By.NAME, "selected[]").get_attribute("value")
                 first_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
                 last_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
-                self.address_cache.append(Address(id=id, firstname=first_name, lastname=last_name))
+                all_phones = cells[5].text
+                self.address_cache.append(Address(id=id, firstname=first_name, lastname=last_name, all_phones_from_home_page = all_phones))
         return list(self.address_cache)
+
+    def open_address_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_address_page()
+        row = wd.find_elements(By.NAME, "entry")[index]
+        cell = row.find_elements(By.TAG_NAME, "td")[6]
+        cell.find_element(By.TAG_NAME, "a").click()
+
+    def get_address_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.init_address_edition_by_index(index)
+        firstname = wd.find_element(By.NAME, "firstname").get_attribute("value")
+        lastname = wd.find_element(By.NAME, "lastname").get_attribute("value")
+        id = wd.find_element(By.NAME, "id").get_attribute("value")
+        home = wd.find_element(By.NAME, "home").get_attribute("value")
+        work = wd.find_element(By.NAME, "work").get_attribute("value")
+        mobile = wd.find_element(By.NAME, "mobile").get_attribute("value")
+        fax = wd.find_element(By.NAME, "fax").get_attribute("value")
+        return Address (firstname=firstname, lastname=lastname, id=id, home=home, work=work, mobile=mobile, fax=fax)
+
+    def get_address_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_address_view_by_index(index)
+        text = wd.find_element(By.ID, "content").text
+        home = re.search("H: (.*)", text).group(1)
+        work = re.search("W: (.*)", text).group(1)
+        mobile = re.search("M: (.*)", text).group(1)
+        fax = re.search("F: (.*)", text).group(1)
+        return Address(home=home, work=work, mobile=mobile, fax=fax)
