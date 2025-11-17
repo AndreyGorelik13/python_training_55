@@ -112,10 +112,12 @@ class AddressHelper:
             for element in (wd.find_elements(By.XPATH, "(//tr[@name='entry'])")):
                 cells = element.find_elements(By.TAG_NAME, "td")
                 id = element.find_element(By.NAME, "selected[]").get_attribute("value")
-                first_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
-                last_name = element.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
+                last_name = cells[1].text
+                first_name = cells[2].text
+                address = cells[3].text
+                all_emails = cells[4].text
                 all_phones = cells[5].text
-                self.address_cache.append(Address(id=id, firstname=first_name, lastname=last_name, all_phones_from_home_page = all_phones))
+                self.address_cache.append(Address(id=id, firstname=first_name, lastname=last_name, address=address, all_phones_from_home_page = all_phones, all_emails_from_home_page = all_emails))
         return list(self.address_cache)
 
     def open_address_view_by_index(self, index):
@@ -135,7 +137,11 @@ class AddressHelper:
         work = wd.find_element(By.NAME, "work").get_attribute("value")
         mobile = wd.find_element(By.NAME, "mobile").get_attribute("value")
         fax = wd.find_element(By.NAME, "fax").get_attribute("value")
-        return Address (firstname=firstname, lastname=lastname, id=id, home=home, work=work, mobile=mobile, fax=fax)
+        address = wd.find_element(By.NAME, "address").get_attribute("value")
+        email = wd.find_element(By.NAME, "email").get_attribute("value")
+        email2 = wd.find_element(By.NAME, "email2").get_attribute("value")
+        email3 = wd.find_element(By.NAME, "email3").get_attribute("value")
+        return Address (firstname=firstname, lastname=lastname, id=id, home=home, mobile=mobile, work=work, fax=fax, address=address, email=email, email2=email2, email3=email3)
 
     def get_address_from_view_page(self, index):
         wd = self.app.wd
