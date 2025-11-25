@@ -59,9 +59,22 @@ class AddressHelper:
         self.return_to_home_page()
         self.address_cache = None
 
+    def delete_address_by_id(self, id):
+        wd = self.app.wd
+        self.open_address_page()
+        self.select_address_by_id(id)
+        # submit deletion
+        wd.find_element(By.NAME, "delete").click()
+        self.return_to_home_page()
+        self.address_cache = None
+
     def select_address_by_index(self, index):
         wd = self.app.wd
         wd.find_elements(By.NAME, "selected[]")[index].click()
+
+    def select_address_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element(By.CSS_SELECTOR, "input[value='%s']" % id).click()
 
     def modify_first_address(self, address):
         self.modify_address_by_index(0, address)
@@ -78,10 +91,25 @@ class AddressHelper:
         self.return_to_home_page()
         self.address_cache = None
 
+    def modify_address_by_id(self, contact):
+        wd = self.app.wd
+        self.open_address_page()
+        self.init_address_edition_by_id(contact.id)
+        self.fill_address_firm(contact)
+        # submit address edition
+        wd.find_element(By.NAME, "update").click()
+        self.return_to_home_page()
+        self.address_cache = None
+
     def init_address_edition_by_index(self, index):
         wd = self.app.wd
         self.open_address_page()
         wd.find_elements(By.XPATH, "(//img[@title='Edit'])")[index].click()
+
+    def init_address_edition_by_id(self, id):
+        wd = self.app.wd
+        self.open_address_page()
+        wd.find_element(By.CSS_SELECTOR, "a[href='edit.php?id=%s']" % id).click()
 
     def open_address_page(self):
         wd = self.app.wd
