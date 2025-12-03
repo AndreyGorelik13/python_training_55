@@ -59,6 +59,38 @@ class AddressHelper:
         self.return_to_home_page()
         self.address_cache = None
 
+    def add_contact_to_group(self, contact_id, group_id):
+        self.open_address_page()
+        self.select_address_by_id(contact_id)
+        self.select_group_to_add_by_id(group_id)
+        self.click_add_to_button()
+        self.return_to_home_page()
+        self.address_cache = None
+
+    def remove_contact_from_group(self, contact_id, group_id):
+        self.open_address_page()
+        self.select_group_to_display_by_id(group_id)
+        self.select_address_by_id(contact_id)
+        self.click_remove_button()
+        self.return_to_home_page()
+        self.address_cache = None
+
+    def click_add_to_button(self):
+        wd = self.app.wd
+        wd.find_element(By.NAME, "add").click()
+
+    def click_remove_button(self):
+        wd = self.app.wd
+        wd.find_element(By.NAME, "remove").click()
+
+    def select_group_to_display_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element(By.XPATH, "//select[@name='group']//option[@value='%s']" %id).click()
+
+    def select_group_to_add_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element(By.XPATH, "//select[@name='to_group']//option[@value='%s']" %id).click()
+
     def delete_address_by_id(self, id):
         wd = self.app.wd
         self.open_address_page()
@@ -123,7 +155,7 @@ class AddressHelper:
     def return_to_home_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/index.php") and len(wd.find_elements(By.XPATH, "//input[@value='Send e-Mail']")) > 0):
-            wd.find_element(By.LINK_TEXT, "home page").click()
+            wd.find_element(By.LINK_TEXT, "home").click()
 
     def count(self):
         wd = self.app.wd
