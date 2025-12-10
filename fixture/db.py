@@ -27,6 +27,7 @@ class DbFixture:
     def destroy(self):
         self.connection.close()
 
+
     def get_contacts_in_group(self):
         list = []
         cursor = self.connection.cursor()
@@ -47,6 +48,20 @@ class DbFixture:
         cursor = self.connection.cursor()
         try:
             cursor.execute("select id, firstname, lastname, address, home, mobile, work, email, email2, email3 from addressbook")
+            for row in cursor:
+                (id, firstname, lastname, address, home, mobile, work, email, email2, email3) = row
+                list.append(Address(id=str(id), firstname=firstname, lastname=lastname, address=address, home=home, mobile=mobile, work=work, email=email, email2=email2, email3=email3))
+        finally:
+            cursor.close()
+        return list
+    def destroy(self):
+        self.connection.close()
+
+    def get_contact_not_in_group(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("SELECT ab.id, firstname, lastname, address, home, mobile, work, email, email2, email3 FROM addressbook ab LEFT JOIN address_in_groups ag ON ab.id = ag.id WHERE ag.id IS NULL")
             for row in cursor:
                 (id, firstname, lastname, address, home, mobile, work, email, email2, email3) = row
                 list.append(Address(id=str(id), firstname=firstname, lastname=lastname, address=address, home=home, mobile=mobile, work=work, email=email, email2=email2, email3=email3))
