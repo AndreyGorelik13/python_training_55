@@ -3,8 +3,6 @@ import json
 import os.path
 import pytest
 import jsonpickle
-import shutil
-import os
 
 from fixture.application import Application
 from fixture.db import DbFixture
@@ -22,8 +20,6 @@ def load_config(file):
 
 @pytest.fixture
 def app(request):
-    print(os.environ)
-    print(shutil.which("geckodriver"))
     global fixture
     browser = request.config.getoption("--browser")
     web_config = load_config(request.config.getoption("--target"))["web"]

@@ -1,11 +1,7 @@
 from model.address import Address
-import shutil
-import os
 
 
 def test_add_new_address(app, db, json_contacts):
-    print(os.environ)
-    print(shutil.which("geckodriver"))
     address = json_contacts
     old_addresses = db.get_contact_list()
     app.address.create(address)
